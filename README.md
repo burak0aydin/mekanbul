@@ -317,6 +317,35 @@ mekanbul/
 
 ---
 
+## 🌐 Web Üzerinden Test
+
+### Tarayıcıda Test Edilebilir Linkler (GET İstekleri)
+
+Aşağıdaki linkler doğrudan tarayıcıda açılarak test edilebilir:
+
+| # | İşlem | Link |
+|---|-------|------|
+| 1 | Tüm Mekanları Listele | [https://mekanbul-henna.vercel.app/api/venues](https://mekanbul-henna.vercel.app/api/venues) |
+| 2 | Mekan Detayı Getir | [https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54](https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54) |
+| 3 | Yorum Detayı Getir | [https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54/comments/6927844b5bd4e5e4c3567d77](https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54/comments/6927844b5bd4e5e4c3567d77) |
+
+### Postman ile Test Edilmesi Gereken İşlemler (POST, PUT, DELETE)
+
+Aşağıdaki işlemler `POST`, `PUT` veya `DELETE` metodu gerektirdiği için **Postman** veya benzeri bir araç ile test edilmelidir:
+
+| # | İşlem | Method | Endpoint |
+|---|-------|--------|----------|
+| 1 | Yeni Mekan Ekle | `POST` | `/api/venues` |
+| 2 | Mekanı Güncelle | `PUT` | `/api/venues/:venueid` |
+| 3 | Yorum Ekle | `POST` | `/api/venues/:venueid/comments` |
+| 4 | Yorum Güncelle | `PUT` | `/api/venues/:venueid/comments/:commentid` |
+| 5 | Yorum Sil | `DELETE` | `/api/venues/:venueid/comments/:commentid` |
+| 6 | Mekanı Sil | `DELETE` | `/api/venues/:venueid` |
+
+> 📥 **Postman Collection:** Proje klasöründeki `postman_collection.json` dosyasını Postman'e import ederek tüm testleri kolayca yapabilirsiniz.
+
+---
+
 ## 🔧 Teknolojiler
 
 - **Backend:** Node.js, Express.js
