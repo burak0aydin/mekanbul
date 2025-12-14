@@ -327,7 +327,7 @@ Aşağıdaki linkler doğrudan tarayıcıda açılarak test edilebilir:
 |---|-------|------|
 | 1 | Tüm Mekanları Listele | [https://mekanbul-henna.vercel.app/api/venues](https://mekanbul-henna.vercel.app/api/venues) |
 | 2 | Mekan Detayı Getir | [https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54](https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54) |
-| 3 | Yorum Detayı Getir | [https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54/comments/6927844b5bd4e5e4c3567d77](https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54/comments/6927844b5bd4e5e4c3567d77) |
+| 3 | Yorum Detayı Getir | [https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54/comments/6927844b5bd4e5e4c3567d77](https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54/comments/693f1047198486ad2172e044) |
 
 ### Postman ile Test Edilmesi Gereken İşlemler (POST, PUT, DELETE)
 
