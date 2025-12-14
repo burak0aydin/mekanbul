@@ -13,6 +13,7 @@ Node.js, Express ve MongoDB (Mongoose) kullanılarak geliştirilmiş REST API pr
 - ✅ Yorumlara göre mekan puanını otomatik güncelleme
 - ✅ MongoDB Atlas ile bulut veritabanı
 - ✅ Vercel ile canlı deployment
+- ✅ URL-encoded form desteği
 
 ## 🛠️ Kurulum
 
@@ -45,56 +46,40 @@ Sunucu `http://localhost:3000` adresinde çalışacaktır.
 
 | # | İşlem | Method | Endpoint |
 |---|-------|--------|----------|
-| 1 | Tüm mekanları listele | `GET` | `/api/venues` |
-| 2 | Yeni mekan ekle | `POST` | `/api/venues` |
+| 1 | Yeni mekan ekle | `POST` | `/api/venues` |
+| 2 | Tüm mekanları listele | `GET` | `/api/venues` |
 | 3 | Mekan detayını getir | `GET` | `/api/venues/:venueid` |
 | 4 | Mekanı güncelle | `PUT` | `/api/venues/:venueid` |
-| 5 | Mekanı sil | `DELETE` | `/api/venues/:venueid` |
-| 6 | Yorum ekle | `POST` | `/api/venues/:venueid/comments` |
-| 7 | Yorum getir | `GET` | `/api/venues/:venueid/comments/:commentid` |
-| 8 | Yorum güncelle | `PUT` | `/api/venues/:venueid/comments/:commentid` |
-| 9 | Yorum sil | `DELETE` | `/api/venues/:venueid/comments/:commentid` |
+| 5 | Yorum ekle | `POST` | `/api/venues/:venueid/comments` |
+| 6 | Yorum getir | `GET` | `/api/venues/:venueid/comments/:commentid` |
+| 7 | Yorum güncelle | `PUT` | `/api/venues/:venueid/comments/:commentid` |
+| 8 | Yorum sil | `DELETE` | `/api/venues/:venueid/comments/:commentid` |
+| 9 | Mekanı sil | `DELETE` | `/api/venues/:venueid` |
 
 ---
 
 ## 🧪 Postman Test Sonuçları
 
-### 1️⃣ Tüm Mekanları Listele (GET)
-
-**Endpoint:** `GET /api/venues`
-
-**URL:** `https://mekanbul-henna.vercel.app/api/venues`
-
-**Açıklama:** Veritabanındaki tüm mekanları listeler.
-
-![List Nearby Venues](tests/ListNearbyVenues.png)
-
----
-
-### 2️⃣ Yeni Mekan Ekle (POST)
+### 1️⃣ Yeni Mekan Ekle (Add Venue)
 
 **Endpoint:** `POST /api/venues`
 
-**URL:** `https://mekanbul-henna.vercel.app/api/venues`
-
-**Body:**
-```json
-{
-  "name": "Test Kafe",
-  "address": "Test Caddesi No:1",
-  "lat": 41.0082,
-  "long": 28.9784,
-  "foodanddrink": ["Kahve", "Çay"],
-  "hours": [
-    {
-      "day": "Pazartesi-Cuma",
-      "open": "09:00",
-      "close": "22:00",
-      "isClosed": false
-    }
-  ]
-}
-```
+**Body (x-www-form-urlencoded):**
+| Key | Value |
+|-----|-------|
+| name | Bilgisayar Mühendisliği |
+| address | Süleyman Demirel Üniversitesi |
+| foodanddrink | Web |
+| lat | 37 |
+| long | 35 |
+| days1 | Pazartesi-Cuma |
+| open1 | 9 |
+| close1 | 11 |
+| isClosed1 | false |
+| days2 | Cumartesi |
+| open2 | 9 |
+| close2 | 11 |
+| isClosed2 | false |
 
 **Başarılı Yanıt:** `201 Created`
 
@@ -102,31 +87,50 @@ Sunucu `http://localhost:3000` adresinde çalışacaktır.
 
 ---
 
-### 3️⃣ Mekan Detayını Getir (GET)
+### 2️⃣ Mekanları Listele (List Nearby Venues)
+
+**Endpoint:** `GET /api/venues?lat=37&long=35`
+
+**Açıklama:** Veritabanındaki tüm mekanları listeler.
+
+**Başarılı Yanıt:** `200 OK`
+
+![List Nearby Venues](tests/ListNearbyVenues.png)
+
+---
+
+### 3️⃣ Mekan Detayını Getir (Get Venue)
 
 **Endpoint:** `GET /api/venues/:venueid`
 
-**URL:** `https://mekanbul-henna.vercel.app/api/venues/693ee8de79811c6c5f9ec435`
-
 **Açıklama:** Belirtilen ID'ye sahip mekanın detaylarını getirir.
+
+**Başarılı Yanıt:** `200 OK`
 
 ![Get Venue](tests/GetVenue.png)
 
 ---
 
-### 4️⃣ Mekanı Güncelle (PUT)
+### 4️⃣ Mekanı Güncelle (Update Venue)
 
 **Endpoint:** `PUT /api/venues/:venueid`
 
-**URL:** `https://mekanbul-henna.vercel.app/api/venues/693ee8de79811c6c5f9ec435`
-
-**Body:**
-```json
-{
-  "name": "Güncellenmiş Kafe",
-  "rating": 5
-}
-```
+**Body (x-www-form-urlencoded):**
+| Key | Value |
+|-----|-------|
+| name | Güncellenmiş Mekan |
+| address | Yeni Adres |
+| foodanddrink | Kahve |
+| lat | 37 |
+| long | 35 |
+| days1 | Pazartesi-Cuma |
+| open1 | 9-11 |
+| close1 | 9-11 |
+| isClosed1 | false |
+| days2 | Cumartesi |
+| open2 | 9-11 |
+| close2 | 9-11 |
+| isClosed2 | false |
 
 **Başarılı Yanıt:** `201 Created`
 
@@ -134,39 +138,16 @@ Sunucu `http://localhost:3000` adresinde çalışacaktır.
 
 ---
 
-### 5️⃣ Mekanı Sil (DELETE)
-
-**Endpoint:** `DELETE /api/venues/:venueid`
-
-**URL:** `https://mekanbul-henna.vercel.app/api/venues/693ee8de79811c6c5f9ec435`
-
-**Açıklama:** Belirtilen ID'ye sahip mekanı siler.
-
-**Başarılı Yanıt:** `200 OK`
-```json
-{
-  "status": "Starbucks Kadıköy isimli mekan silindi"
-}
-```
-
-![Delete Venue](tests/DeleteVenue.png)
-
----
-
-### 6️⃣ Yorum Ekle (POST)
+### 5️⃣ Yorum Ekle (Add Comment)
 
 **Endpoint:** `POST /api/venues/:venueid/comments`
 
-**URL:** `https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54/comments`
-
-**Body:**
-```json
-{
-  "author": "Burak",
-  "rating": 5,
-  "text": "Harika bir mekan!"
-}
-```
+**Body (x-www-form-urlencoded):**
+| Key | Value |
+|-----|-------|
+| author | Burak |
+| rating | 5 |
+| text | Harika bir mekan! |
 
 **Başarılı Yanıt:** `201 Created`
 
@@ -176,32 +157,28 @@ Sunucu `http://localhost:3000` adresinde çalışacaktır.
 
 ---
 
-### 7️⃣ Yorum Getir (GET)
+### 6️⃣ Yorum Getir (Get Comment)
 
 **Endpoint:** `GET /api/venues/:venueid/comments/:commentid`
 
-**URL:** `https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54/comments/YORUM_ID`
-
 **Açıklama:** Belirtilen mekan ve yorum ID'sine sahip yorumu getirir.
+
+**Başarılı Yanıt:** `200 OK`
 
 ![Get Comment](tests/GetComment.png)
 
 ---
 
-### 8️⃣ Yorum Güncelle (PUT)
+### 7️⃣ Yorum Güncelle (Update Comment)
 
 **Endpoint:** `PUT /api/venues/:venueid/comments/:commentid`
 
-**URL:** `https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54/comments/YORUM_ID`
-
-**Body:**
-```json
-{
-  "author": "Burak",
-  "rating": 4,
-  "text": "Güzel ama biraz kalabalık"
-}
-```
+**Body (x-www-form-urlencoded):**
+| Key | Value |
+|-----|-------|
+| author | Burak |
+| rating | 4 |
+| text | Güzel ama biraz kalabalık |
 
 **Başarılı Yanıt:** `201 Created`
 
@@ -211,15 +188,14 @@ Sunucu `http://localhost:3000` adresinde çalışacaktır.
 
 ---
 
-### 9️⃣ Yorum Sil (DELETE)
+### 8️⃣ Yorum Sil (Delete Comment)
 
 **Endpoint:** `DELETE /api/venues/:venueid/comments/:commentid`
-
-**URL:** `https://mekanbul-henna.vercel.app/api/venues/692784065bd4e5e4c3567d54/comments/YORUM_ID`
 
 **Açıklama:** Belirtilen yorumu siler ve mekanın rating değerini yeniden hesaplar.
 
 **Başarılı Yanıt:** `200 OK`
+
 ```json
 {
   "status": "Yorum silindi"
@@ -230,14 +206,45 @@ Sunucu `http://localhost:3000` adresinde çalışacaktır.
 
 ---
 
+### 9️⃣ Mekanı Sil (Delete Venue)
+
+**Endpoint:** `DELETE /api/venues/:venueid`
+
+**Açıklama:** Belirtilen ID'ye sahip mekanı siler.
+
+**Başarılı Yanıt:** `200 OK`
+
+```json
+{
+  "status": "Mekan adı isimli mekan silindi"
+}
+```
+
+![Delete Venue](tests/DeleteVenue.png)
+
+---
+
+## 📥 Postman Koleksiyonu
+
+Proje klasöründeki `postman_collection.json` dosyasını Postman'e import ederek tüm testleri otomatik olarak çalıştırabilirsiniz.
+
+### Import Adımları:
+1. Postman'i açın
+2. **Import** butonuna tıklayın
+3. `postman_collection.json` dosyasını seçin
+4. Koleksiyonu sağ tıklayıp **Run collection** seçin
+
+---
+
 ## 📁 Proje Yapısı
 
 ```
 mekanbul/
-├── app.js                    # Ana uygulama dosyası
-├── package.json              # Bağımlılıklar
-├── vercel.json               # Vercel deployment ayarları
-├── .env                      # Ortam değişkenleri (git'e dahil değil)
+├── app.js                        # Ana uygulama dosyası
+├── package.json                  # Bağımlılıklar
+├── vercel.json                   # Vercel deployment ayarları
+├── postman_collection.json       # Postman test koleksiyonu
+├── .env                          # Ortam değişkenleri (git'e dahil değil)
 ├── .gitignore
 │
 ├── app_api/
@@ -265,15 +272,15 @@ mekanbul/
 │   └── users.js
 │
 └── tests/                        # Postman test ekran görüntüleri
-    ├── ListNearbyVenues.png
     ├── AddVenue.png
+    ├── ListNearbyVenues.png
     ├── GetVenue.png
     ├── UpdateVenue.png
-    ├── DeleteVenue.png
     ├── AddComment.png
     ├── GetComment.png
     ├── UpdateComment.png
-    └── DeleteComment.png
+    ├── DeleteComment.png
+    └── DeleteVenue.png
 ```
 
 ---
