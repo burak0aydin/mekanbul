@@ -33,13 +33,37 @@ const listVenues = async function (req, res) {
 
 const addVenue = async function (req, res) {
     try {
+        // Hours dizisini oluştur (urlencoded formatı için)
+        let hours = [];
+        if (req.body.days1) {
+            hours.push({
+                day: req.body.days1,
+                open: req.body.open1,
+                close: req.body.close1,
+                isClosed: req.body.isClosed1 === 'true'
+            });
+        }
+        if (req.body.days2) {
+            hours.push({
+                day: req.body.days2,
+                open: req.body.open2,
+                close: req.body.close2,
+                isClosed: req.body.isClosed2 === 'true'
+            });
+        }
+        // Eğer hours array olarak geliyorsa onu kullan
+        if (req.body.hours && Array.isArray(req.body.hours)) {
+            hours = req.body.hours;
+        }
+
         const venue = await Venue.create({
             name: req.body.name,
             address: req.body.address,
             rating: req.body.rating || 0,
-            foodanddrink: req.body.foodanddrink,
-            coordinates: [req.body.lat, req.body.long],
-            hours: req.body.hours,
+            foodanddrink: req.body.foodanddrink ? 
+                (Array.isArray(req.body.foodanddrink) ? req.body.foodanddrink : [req.body.foodanddrink]) : [],
+            coordinates: [parseFloat(req.body.lat), parseFloat(req.body.long)],
+            hours: hours,
             comments: req.body.comments || []
         });
         createResponse(res, 201, venue);
@@ -64,9 +88,41 @@ const getVenue = async function (req, res) {
 
 const updateVenue = async function (req, res) {
     try {
+        // Hours dizisini oluştur (urlencoded formatı için)
+        let updateData = { ...req.body };
+        
+        if (req.body.days1 || req.body.days2) {
+            let hours = [];
+            if (req.body.days1) {
+                hours.push({
+                    day: req.body.days1,
+                    open: req.body.open1,
+                    close: req.body.close1,
+                    isClosed: req.body.isClosed1 === 'true'
+                });
+            }
+            if (req.body.days2) {
+                hours.push({
+                    day: req.body.days2,
+                    open: req.body.open2,
+                    close: req.body.close2,
+                    isClosed: req.body.isClosed2 === 'true'
+                });
+            }
+            updateData.hours = hours;
+        }
+
+        if (req.body.lat && req.body.long) {
+            updateData.coordinates = [parseFloat(req.body.lat), parseFloat(req.body.long)];
+        }
+
+        if (req.body.foodanddrink && !Array.isArray(req.body.foodanddrink)) {
+            updateData.foodanddrink = [req.body.foodanddrink];
+        }
+
         const venue = await Venue.findByIdAndUpdate(
             req.params.venueid,
-            req.body,
+            updateData,
             { new: true }
         );
         if (!venue) {
